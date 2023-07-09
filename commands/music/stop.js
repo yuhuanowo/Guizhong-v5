@@ -3,7 +3,7 @@ const { useMainPlayer, useQueue  } = require('discord-player');
 
 module.exports = {
     name: 'stop',
-    description: 'stop the track',
+    description: '停止播放歌曲',
     voiceChannel: true,
 
     execute({ inter }) {
@@ -11,13 +11,18 @@ module.exports = {
 
 const queue = useQueue(inter.guild);
 
-        if (!queue || !queue.isPlaying()) return inter.editReply({ content:`No music currently playing ${inter.member}... try again ? ❌`, ephemeral: true });
+        if (!queue || !queue.isPlaying())
+        {
+                const enevt = new EmbedBuilder()
+                .setTitle('當前沒有播放音樂... 再試一次 ? ❌')
+                return inter.editReply({ embeds: [enevt] }, { ephemeral: true });
+        }
 
         queue.delete();
 
         const StopEmbed = new EmbedBuilder()
         .setColor('#2f3136')
-        .setAuthor({name: `Music stopped into this server, see you next time ✅` })
+        .setAuthor({name: `音樂已停止撥放，下次見 ✅` })
 
 
        return inter.editReply({ embeds: [StopEmbed] });

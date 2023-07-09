@@ -3,18 +3,18 @@ const { useMainPlayer, useQueue  } = require('discord-player');
 
 module.exports = {
     name: 'skipto',
-    description: "skips to particular track in queue",
+    description: "跳到隊列中的特定歌曲",
     voiceChannel: true,
     options: [
         {
             name: 'song',
-            description: 'the name/url of the track you want to skip to',
+            description: '您要跳至的曲目的名稱/URL',
             type: ApplicationCommandOptionType.String,
             required: false,
         },
         {
             name: 'number',
-            description: 'the place in the queue the song is in',
+            description: '歌曲在隊列中的位置',
             type: ApplicationCommandOptionType.Number,
             required: false,
         }
@@ -28,23 +28,43 @@ module.exports = {
 
 const queue = useQueue(inter.guild);
 
-        if (!queue || !queue.isPlaying()) return inter.editReply({ content: `No music currently playing ${inter.member}... try again ? ❌`, ephemeral: true });
-        if (!track && !number) inter.editReply({ content: `You have to use one of the options to jump to a song ${inter.member}... try again ? ❌`, ephemeral: true });
+        if (!queue || !queue.isPlaying())
+        {
+            const enevt = new EmbedBuilder()
+            .setTitle('當前沒有播放音樂... 再試一次 ? ❌')
+            return inter.editReply({ embeds: [enevt] }, { ephemeral: true });
+        }
 
+        if (!track && !number)
+        {
+            const enevt2 = new EmbedBuilder()
+            .setTitle('您必須使用其中一個選項來跳轉到歌曲... 再試一次 ? ❌')
+            inter.editReply({ embeds: [enevt2] }, { ephemeral: true });
+        }
             if (track) {
                 const track_skipto = queue.tracks.toArray().find((t) => t.title.toLowerCase() === track.toLowerCase() || t.url === track)
-                if (!track_skipto) return inter.editReply({ content: `could not find ${track} ${inter.member}... try using the url or the full name of the song ? ❌`, ephemeral: true });
+                if (!track_skipto)
+                {
+                    const enevt3 = new EmbedBuilder()
+                    .setTitle('該曲目似乎不存在... 嘗試使用歌曲的URL或全名 ? ❌')
+                    return inter.editReply({ embeds: [enevt3] }, { ephemeral: true });
+                }
                 queue.node.skipTo(track_skipto);
-                return inter.editReply({ content: `Jumped to ${track_skipto.title}  ✅` });
+                return inter.editReply({ content: `跳轉到 ${track_skipto.title}  ✅` });
     }
     if (number) {
         const index = number - 1
         const trackname = queue.tracks.toArray()[index].title
-        if (!trackname) return inter.editReply({ content: `This track dose not seem to exist ${inter.member}...  try again ?❌`, ephemeral: true });   
+        if (!trackname)
+        {
+            const enevt4 = new EmbedBuilder()
+            .setTitle('該曲目似乎不存在... 再試一次 ? ❌')
+            return inter.editReply({ embeds: [enevt4] }, { ephemeral: true });
+        } 
         queue.node.skipTo(index);
 
         const skipToEmbed = new EmbedBuilder()
-        .setAuthor({name: `Skiped to ${trackname} ✅`})
+        .setAuthor({name: `跳轉到 ${trackname} ✅`})
         .setColor('#2f3136')
         
         inter.editReply({ embeds: [skipToEmbed] });

@@ -3,7 +3,7 @@ const { useMainPlayer, useQueue  } = require('discord-player');
 
 module.exports = {
     name: 'skip',
-    description: 'skip the track',
+    description: '跳過當前歌曲',
     voiceChannel: true,
 
     execute({ inter }) {
@@ -11,13 +11,18 @@ module.exports = {
 
 const queue = useQueue(inter.guild);
 
-         if (!queue || !queue.isPlaying()) return inter.editReply({ content:`No music currently playing ${inter.member}... try again ? ❌`, ephemeral: true });
+         if (!queue || !queue.isPlaying())
+         {
+                const enevt = new EmbedBuilder()
+                .setTitle('當前沒有播放音樂... 再試一次 ? ❌')
+                return inter.editReply({ embeds: [enevt] }, { ephemeral: true });
+         }
 
         const success = queue.node.skip();
 
         const SkipEmbed = new EmbedBuilder()
         .setColor('#2f3136')
-        .setAuthor({name: success ? `Current music ${queue.currentTrack.title} skipped ✅` : `Something went wrong ${inter.member}... try again ? ❌` })
+        .setAuthor({name: success ? `當前音樂 ${queue.currentTrack.title} 已跳過✅` : `出了些問題 ${inter.member}... 再試一次 ? ❌` })
 
 
        return inter.editReply({ embeds: [SkipEmbed] });

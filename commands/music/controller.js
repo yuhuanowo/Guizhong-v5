@@ -2,88 +2,93 @@ const { ApplicationCommandOptionType, ActionRowBuilder, ButtonBuilder, EmbedBuil
 
 module.exports = {
     name: 'controller',
-    description: "set controller channel ",
+    description: "設定控制器頻道 ",
     voiceChannel: false,
     permissions: PermissionsBitField.Flags.ManageMessages,
     options: [
         {
             name: 'channel',
-            description: 'the channel you want to send it to',
+            description: '您要將其發送到的頻道',
             type: ApplicationCommandOptionType.Channel,
             required: true,
         }
     ],
     async execute({ inter, client }) { 
       let Channel = inter.options.getChannel('channel');
-      if (Channel.type !== 0) return inter.editReply({ content: `you have to send it to a text channel.. ❌`, ephemeral: true})
+      if (Channel.type !== 0) {
+        const embed = new EmbedBuilder()
+        .setTitle('你必須將其發送到文字頻道..❌')  
+        return inter.editReply({ embeds: [embed], ephemeral: true })
+        }
 
     
       const embed = new EmbedBuilder()
-       .setTitle('control your music from the buttons below')
+       .setTitle('通過下面的按鈕控制您的音樂')
        .setImage(inter.guild.iconURL({ size: 4096, dynamic: true }))
-       .setColor('#2f3136')
-       .setFooter({ text: 'Music comes first - Made with heart by Zerio ❤️', iconURL: inter.member.avatarURL({ dynamic: true })})
+       .setColor('#5000b8')
+       .setTimestamp()
+       .setFooter({ text: '可愛的歸終~❤️', iconURL: inter.member.avatarURL({ dynamic: true })})
 
 
-         inter.editReply({ content: `sending controller to ${Channel}... ✅`, ephemeral: true})
+         inter.editReply({ content: `發送控制器到 ${Channel}... ✅`, ephemeral: true})
 
          const back = new ButtonBuilder()
-         .setLabel('Back')
+         .setLabel('上一首')
          .setCustomId(JSON.stringify({ffb: 'back'}))
          .setStyle('Primary')
 
          const skip = new ButtonBuilder()
-         .setLabel('Skip')
+         .setLabel('跳過')
          .setCustomId(JSON.stringify({ffb: 'skip'}))
          .setStyle('Primary')
 
          const resumepause = new ButtonBuilder()
-         .setLabel('Resume & Pause')
+         .setLabel('重新開始 & 暫停')
          .setCustomId(JSON.stringify({ffb: 'resume&pause'}))
          .setStyle('Danger')
 
          const save = new ButtonBuilder()
-         .setLabel('Save')
+         .setLabel('儲存')
          .setCustomId(JSON.stringify({ffb: 'savetrack'}))
          .setStyle('Success')
 
          const volumeup = new ButtonBuilder()
-         .setLabel('Volume up')
+         .setLabel('音量增加')
          .setCustomId(JSON.stringify({ffb: 'volumeup'}))
          .setStyle('Primary')
 
          const volumedown = new ButtonBuilder()
-         .setLabel('Volume Down')
+         .setLabel('音量減小')
          .setCustomId(JSON.stringify({ffb: 'volumedown'}))
          .setStyle('Primary')
 
          const loop = new ButtonBuilder()
-         .setLabel('Loop')
+         .setLabel('循環')
          .setCustomId(JSON.stringify({ffb: 'loop'}))
          .setStyle('Danger')
 
          const np = new ButtonBuilder()
-         .setLabel('Now Playing')
+         .setLabel('正在播放')
          .setCustomId(JSON.stringify({ffb: 'nowplaying'}))
          .setStyle('Secondary')
          
          const queuebutton = new ButtonBuilder()
-         .setLabel('Queue')
+         .setLabel('隊列')
          .setCustomId(JSON.stringify({ffb: 'queue'}))
          .setStyle('Secondary')
 
         const lyrics = new ButtonBuilder()
-            .setLabel('lyrics')
+            .setLabel('歌詞')
             .setCustomId(JSON.stringify({ffb: 'lyrics'}))
             .setStyle('Primary')
 
         const shuffle = new ButtonBuilder()
-            .setLabel('shuffle')
+            .setLabel('隨機播放')
             .setCustomId(JSON.stringify({ffb: 'shuffle'}))
             .setStyle('Success')
 
         const stop = new ButtonBuilder()
-            .setLabel('Stop')
+            .setLabel('停止')
             .setCustomId(JSON.stringify({ffb: 'stop'}))
             .setStyle('Danger')
 

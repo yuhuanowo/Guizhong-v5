@@ -3,31 +3,31 @@ module.exports = (queue, track) => {
 
     if (!client.config.app.loopMessage && queue.repeatMode !== 0) return;
     const embed = new EmbedBuilder()
-    .setAuthor({name: `Started playing ${track.title} in ${queue.channel.name} 🎧`, iconURL: track.thumbnail})
+    .setAuthor({name: `開始撥放 ${track.title} 在 ${queue.channel.name} 🎧`, iconURL: track.thumbnail})
     .setColor('#2f3136')
 
     const back = new ButtonBuilder()
-    .setLabel('Back')
+    .setLabel('上一首')
     .setCustomId(JSON.stringify({ffb: 'back'}))
     .setStyle('Primary')
 
     const skip = new ButtonBuilder()
-    .setLabel('Skip')
+    .setLabel('跳過')
     .setCustomId(JSON.stringify({ffb: 'skip'}))
     .setStyle('Primary')
 
     const resumepause = new ButtonBuilder()
-    .setLabel('Resume & Pause')
+    .setLabel('重新開始 & 暫停')
     .setCustomId(JSON.stringify({ffb: 'resume&pause'}))
     .setStyle('Danger')
 
     const loop = new ButtonBuilder()
-    .setLabel('Loop')
+    .setLabel('循環')
     .setCustomId(JSON.stringify({ffb: 'loop'}))
     .setStyle('Secondary')
     
     const lyrics = new ButtonBuilder()
-    .setLabel('lyrics')
+    .setLabel('歌詞')
     .setCustomId(JSON.stringify({ffb: 'lyrics'}))
     .setStyle('Secondary')
 

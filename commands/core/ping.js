@@ -1,12 +1,13 @@
 const ms = require('ms');
+const {  EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'ping',
-    description: "Get the ping of the bot!",
+    description: "獲取歸終的 ping!",
     async execute({ client, inter }) {
-
-        const m = await inter.editReply("Ping?")
-        inter.editReply(`Pong! API Latency is ${Math.round(client.ws.ping)}ms 🛰️, Last heartbeat calculated ${ms(Date.now() - client.ws.shards.first().lastPingTimestamp, { long: true })} ago`)
-
+        const pingEmbed = new EmbedBuilder()
+        .setAuthor({name: `🏓 Pong! ${client.ws.ping}ms`})
+        .setColor('#2f3136')
+        inter.editReply({ embeds: [pingEmbed] });
     },
 };

@@ -4,12 +4,12 @@ const { useMainPlayer, useQueue  } = require('discord-player');
 
 module.exports = {
     name: 'seek',
-    description: 'skip back or foward in a song',
+    description: '在歌曲中快退或快進',
     voiceChannel: true,
     options: [
     {
         name: 'time',
-        description: 'time that you want to skip to',
+        description: '您想跳過的時間o',
         type: ApplicationCommandOptionType.String,
         required: true,
     }
@@ -19,17 +19,27 @@ module.exports = {
 
 const queue = useQueue(inter.guild);
 
-        if (!queue || !queue.isPlaying()) return inter.editReply({ content: `No music currently playing ${inter.editReply}... try again ? ❌`, ephemeral: true });
+        if (!queue || !queue.isPlaying())
+        {
+            const enevt = new EmbedBuilder()
+            .setTitle('當前沒有播放音樂... 再試一次 ? ❌')
+            return inter.editReply({ embeds: [enevt] }, { ephemeral: true });
+        }
 
         const timeToMS = ms(inter.options.getString('time'));
 
-        if (timeToMS >= queue.currentTrack.durationMS) return inter.editReply({ content:`The indicated time is higher than the total time of the current song ${inter.member}... try again ? ❌\n*Try for example a valid time like **5s, 10s, 20 seconds, 1m**...*`, ephemeral: true });
+        if (timeToMS >= queue.currentTrack.durationMS)
+        {
+            const enevt2 = new EmbedBuilder()
+            .setTitle('指定的時間高於當前歌曲的總時間... 再試一次 ? ❌')
+            return inter.editReply({ embeds: [enevt2] }, { ephemeral: true });
+        }
 
         await queue.node.seek(timeToMS);
 
         const SeekEmbed = new EmbedBuilder()
         .setColor('#2f3136')
-        .setAuthor({name: `Time set on the current song **${ms(timeToMS, { long: true })}** ✅`})
+        .setAuthor({name: `當前歌曲的時間設置 **${ms(timeToMS, { long: true })}** ✅`})
 
 
         inter.editReply({ embeds: [SeekEmbed] });

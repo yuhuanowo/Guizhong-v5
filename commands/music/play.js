@@ -3,12 +3,12 @@ const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'play',
-    description: "play a song!",
+    description: "播放一首歌！",
     voiceChannel: true,
     options: [
         {
             name: 'song',
-            description: 'the song you want to play',
+            description: '你想播放的歌曲',
             type: ApplicationCommandOptionType.String,
             required: true,
         }
@@ -23,7 +23,7 @@ module.exports = {
             searchEngine: QueryType.AUTO
         });
         const NoResultsEmbed = new EmbedBuilder()
-            .setAuthor({ name: `No results found... try again ? ❌`})
+            .setAuthor({ name: `未找到結果... 再試一次 ? ❌`})
             .setColor('#2f3136')
 
         if (!res || !res.tracks.length) return inter.editReply({ embeds: [NoResultsEmbed] });
@@ -44,14 +44,14 @@ module.exports = {
             await player.deleteQueue(inter.guildId);
 
             const NoVoiceEmbed = new EmbedBuilder()
-                .setAuthor({ name: `I can't join the voice channel... try again ? ❌`})
+                .setAuthor({ name: `無法加入語音頻道... 再試一次 ? ❌`})
                 .setColor('#2f3136')
 
             return inter.editReply({ embeds: [NoVoiceEmbed] });
         }
 
             const playEmbed = new EmbedBuilder()
-                .setAuthor({ name: `Loading your ${res.playlist ? 'playlist' : 'track'} to the queue... ✅`})
+                .setAuthor({ name: `正在加載您的 ${res.playlist ? '播放列表' : '歌曲'} 到隊列... ✅`})
                 .setColor('#2f3136')
                 
             await inter.editReply({ embeds: [playEmbed] });

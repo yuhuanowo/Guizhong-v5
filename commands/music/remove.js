@@ -3,18 +3,18 @@ const { useMainPlayer, useQueue  } = require('discord-player');
 
 module.exports = {
     name: 'remove',
-    description: "remove a song from the queue",
+    description: "從隊列中刪除歌曲",
     voiceChannel: true,
     options: [
         {
             name: 'song',
-            description: 'the name/url of the track you want to remove',
+            description: '您要刪除的曲目的名稱/URL',
             type: ApplicationCommandOptionType.String,
             required: false,
         },
         {
             name: 'number',
-            description: 'the place in the queue the song is in',
+            description: '歌曲在隊列中的位置',
             type: ApplicationCommandOptionType.Number,
             required: false,
         }
@@ -28,8 +28,18 @@ module.exports = {
 
 const queue = useQueue(inter.guild);
 
-        if (!queue || !queue.isPlaying()) return inter.editReply({ content: `No music currently playing ${inter.member}... try again ? ❌`, ephemeral: true });
-        if (!track && !number) inter.editReply({ content: `You have to use one of the options to remove a song ${inter.member}... try again ? ❌`, ephemeral: true });
+        if (!queue || !queue.isPlaying()) 
+        {
+            const enevt = new EmbedBuilder()
+            .setTitle('當前沒有播放音樂... 再試一次 ? ❌')
+            return inter.editReply({ embeds: [enevt] }, { ephemeral: true });    
+        }
+        if (!track && !number) 
+        {
+            const enevt2 = new EmbedBuilder()
+            .setTitle('您必須使用其中一個選項來刪除歌曲... 再試一次 ? ❌')
+            inter.editReply({ embeds: [enevt2] }, { ephemeral: true });
+        }
 
         const BaseEmbed = new EmbedBuilder()
         .setColor('#2f3136')
@@ -37,9 +47,14 @@ const queue = useQueue(inter.guild);
 
         if (track) {
             const track_to_remove = queue.tracks.toArray().find((t) => t.title === track || t.url === track);
-            if (!track_to_remove) return inter.editReply({ content: `could not find ${track} ${inter.member}... try using the url or the full name of the song ? ❌`, ephemeral: true });
+            if (!track_to_remove) 
+            {
+                const enevt3 = new EmbedBuilder()
+                .setTitle('該曲目似乎不存在... 嘗試使用歌曲的URL或全名 ? ❌')
+                return inter.editReply({ embeds: [enevt3] }, { ephemeral: true });
+            }
             queue.removeTrack(track_to_remove);
-            BaseEmbed.setAuthor({name: `removed ${track_to_remove.title} from the queue ✅` })
+            BaseEmbed.setAuthor({name: `已從列隊中刪除 ${track_to_remove.title}  ✅` })
 
             return inter.editReply({ embeds: [BaseEmbed] });
         }
@@ -49,11 +64,16 @@ const queue = useQueue(inter.guild);
             const index = number - 1
             const trackname = queue.tracks.toArray()[index].title
 
-            if (!trackname) return inter.editReply({ content: `This track dose not seem to exist ${inter.member}...  try again ?❌`, ephemeral: true });   
+            if (!trackname) 
+            {
+                const enevt4 = new EmbedBuilder()
+                .setTitle('該曲目似乎不存在... 再試一次 ? ❌')
+                return inter.editReply({ embeds: [enevt4] }, { ephemeral: true });
+            }
 
             queue.removeTrack(index);
 
-            BaseEmbed.setAuthor({name: `removed ${trackname} from the queue ✅` })
+            BaseEmbed.setAuthor({name: `已從隊列中刪除 ${trackname} ✅` })
 
             return inter.editReply({ embeds: [BaseEmbed] });
         }
