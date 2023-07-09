@@ -1,9 +1,9 @@
 const { QueueRepeatMode } = require('discord-player');
 module.exports = async ({  inter, queue }) => { 
 
-    const methods = ['disabled', 'track', 'queue'];
+    const methods = ['禁用', '歌曲', '隊列'];
 
-    if (!queue || !queue.isPlaying()) return inter.editReply({ content: `No music currently playing... try again ? ❌`, ephemeral: true });
+    if (!queue || !queue.isPlaying()) return inter.editReply({ content: `當前沒有播放音樂...再試一次 ? ❌`, ephemeral: true });
 
     const repeatMode = queue.repeatMode
 
@@ -13,7 +13,7 @@ module.exports = async ({  inter, queue }) => {
 
     if (repeatMode === 2) queue.setRepeatMode( QueueRepeatMode.OFF)
     
-    return inter.editReply({ content: `loop made has been set to **${methods[queue.repeatMode]}**.✅`})
+    return inter.editReply({ content: `循環已設置為 **${methods[queue.repeatMode]}**.✅`})
 
 
 

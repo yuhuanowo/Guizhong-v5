@@ -1,7 +1,7 @@
 const { EmbedBuilder } = require('discord.js')
 
 module.exports = async ({ inter, queue }) => {
-    if (!queue || !queue.isPlaying()) return inter.editReply({ content: `No music currently playing... try again ? ❌`, ephemeral: true });
+    if (!queue || !queue.isPlaying()) return inter.editReply({ content: `當前沒有播放音樂... 再試一次 ? ❌`, ephemeral: true });
 
     inter.member.send({
         embeds: [
@@ -10,18 +10,18 @@ module.exports = async ({ inter, queue }) => {
                 .setTitle(`:arrow_forward: ${queue.currentTrack.title}`)
                 .setURL(queue.currentTrack.url)
                 .addFields(
-                    { name: ':hourglass: Duration:', value: `\`${queue.currentTrack.duration}\``, inline: true },
-                    { name: 'Song by:', value: `\`${queue.currentTrack.author}\``, inline: true },
-                    { name: 'Views :eyes:', value: `\`${Number(queue.currentTrack.views).toLocaleString()}\``, inline: true },
-                    { name: 'Song URL:', value: `\`${queue.currentTrack.url}\`` }
+                    { name: ':hourglass: 持續時間:', value: `\`${queue.currentTrack.duration}\``, inline: true },
+                    { name: '歌曲作者:', value: `\`${queue.currentTrack.author}\``, inline: true },
+                    { name: '觀看次數 :eyes:', value: `\`${Number(queue.currentTrack.views).toLocaleString()}\``, inline: true },
+                    { name: '歌曲 URL:', value: `\`${queue.currentTrack.url}\`` }
                 )
                 .setThumbnail(queue.currentTrack.thumbnail)
-                .setFooter({ text: `from the server ${inter.member.guild.name}`, iconURL: inter.member.guild.iconURL({ dynamic: false }) })
+                .setFooter({ text: `從伺服器-> ${inter.member.guild.name}`, iconURL: inter.member.guild.iconURL({ dynamic: false }) })
         ]
     }).then(() => {
-        return inter.editReply({ content: `I have sent you the title of the music by private messages ✅`, ephemeral: true });
+        return inter.editReply({ content: `我已經私信給你發音樂名了 ✅`, ephemeral: true });
     }).catch(error => {
-        return inter.editReply({ content: `Unable to send you a private message... try again ? ❌`, ephemeral: true });
+        return inter.editReply({ content: `無法給您發送私人消息... 再試一次 ? ❌`, ephemeral: true });
     });
 
 
